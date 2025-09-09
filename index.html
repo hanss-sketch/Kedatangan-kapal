@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Pelaporan Kedatangan Kapal</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts - Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-wave">
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+            </div>
+            <h2>HANS GACOR</h2>
+            <p>Loading System...</p>
+        </div>
+    </div>
+
+    <!-- Navigation Sidebar -->
+    <nav id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-anchor"></i>
+                <span>HANS GACORR </span>
+            </div>
+            <button id="sidebarToggle" class="sidebar-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li class="menu-item active" data-target="dashboard">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </li>
+            <li class="menu-item" data-target="reports">
+                <i class="fas fa-ship"></i>
+                <span>Laporan Kapal</span>
+            </li>
+            <li class="menu-item" data-target="analytics">
+                <i class="fas fa-chart-line"></i>
+                <span>Analytics</span>
+            </li>
+            <li class="menu-item" data-target="settings">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </li>
+        </ul>
+        
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-details">
+                    <span class="username">Admin Hans</span>
+                    <span class="user-role">Port Manager</span>
+                </div>
+            </div>
+            <button class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="mainContent" class="main-content">
+        <!-- Header -->
+        <header class="main-header">
+            <div class="header-left">
+                <h1 id="pageTitle">Dashboard</h1>
+                <p id="pageSubtitle">Overview sistem pelaporan kedatangan kapal</p>
+            </div>
+            <div class="header-right">
+                <div class="notifications">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                </div>
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Cari...">
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-ship"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalShips">0</h3>
+                        <p>Total Kapal</p>
+                    </div>
+                    <div class="stat-trend up">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>12%</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="todayArrivals">0</h3>
+                        <p>Kedatangan Hari Ini</p>
+                    </div>
+                    <div class="stat-trend up">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>8%</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="pendingDocs">0</h3>
+                        <p>Dokumen Tidak Lengkap</p> <!-- Updated text -->
+                    </div>
+                    <div class="stat-trend down">
+                        <i class="fas fa-arrow-down"></i>
+                        <span>5%</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="activeShips">0</h3>
+                        <p>Kapal Aktif</p>
+                    </div>
+                    <div class="stat-trend up">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>15%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Statistik Kedatangan Bulanan</h3>
+                        <!-- Removed chartRange select as it's not implemented -->
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="arrivalChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Status Dokumen</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="documentChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recent-activity">
+                <div class="activity-header">
+                    <h3>Aktivitas Terbaru</h3>
+                    <button class="view-all">Lihat Semua</button>
+                </div>
+                <div class="activity-list" id="activityList">
+                    <!-- Activities will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Reports Section -->
+        <section id="reports" class="content-section">
+            <div class="section-header">
+                <h2>Manajemen Laporan Kapal</h2>
+                <div class="section-actions"> <!-- Added a container for buttons -->
+                    <button class="btn btn-primary" onclick="openModal('addShipModal')">
+                        <i class="fas fa-plus"></i> Tambah Kapal Baru
+                    </button>
+                    <button class="btn btn-info" onclick="printReportTable()"> <!-- Added Print Button -->
+                        <i class="fas fa-print"></i> Cetak Laporan
+                    </button>
+                </div>
+            </div>
+
+            <div class="filters-container">
+                <div class="filter-group">
+                    <input type="text" id="searchInput" placeholder="Cari kapal...">
+                    <i class="fas fa-search"></i>
+                </div>
+                
+                <div class="filter-group">
+                    <select id="statusFilter">
+                        <option value="">Semua Status Dokumen</option>
+                        <option value="Lengkap">Lengkap</option>
+                        <option value="Tidak Lengkap">Tidak Lengkap</option>
+                        <option value="Pasca">Pasca</option>
+                        <option value="Daerah Lengkap">Daerah Lengkap</option>
+                        <option value="Siup Pusat">Siup Pusat</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <input type="date" id="dateFilter">
+                </div>
+
+                <button class="btn btn-secondary" onclick="clearFilters()">
+                    <i class="fas fa-refresh"></i> Reset Filter
+                </button>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Aksi</th>
+                            <th data-sort="shipName">Nama Kapal <i class="fas fa-sort"></i></th>
+                            <th data-sort="grossTonnage">Tonnage <i class="fas fa-sort"></i></th>
+                            <th data-sort="shipOwner">Pemilik</th>
+                            <th data-sort="captain">Nahkoda</th>
+                            <th data-sort="arrivalDate">Tanggal/Jam <i class="fas fa-sort"></i></th>
+                            <th>No. HP</th>
+                            <th>Status HP</th>
+                            <th data-sort="documentStatus">Dokumen <i class="fas fa-sort"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody id="shipTableBody">
+                        <!-- Data will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <button class="pagination-btn" onclick="changePage(-1)">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <span class="page-info">Halaman <span id="currentPage">1</span> dari <span id="totalPages">1</span></span>
+                <button class="pagination-btn" onclick="changePage(1)">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- Analytics Section -->
+        <section id="analytics" class="content-section">
+            <div class="section-header">
+                <h2>Analytics & Reports</h2>
+                <div class="export-buttons">
+                    <button class="btn btn-success" onclick="exportToCSV()">
+                        <i class="fas fa-file-csv"></i> Ekspor CSV
+                    </button>
+                </div>
+            </div>
+
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h3>Trend Kedatangan</h3>
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings" class="content-section">
+            <div class="section-header">
+                <h2>System Settings</h2>
+            </div>
+
+            <div class="settings-grid">
+                <div class="settings-card">
+                    <h3>General Settings</h3>
+                    <div class="setting-item">
+                        <label>Nama Pelabuhan</label>
+                        <input type="text" value="Pelabuhan Hans">
+                    </div>
+                    <div class="setting-item">
+                        <label>Zona Waktu</label>
+                        <select>
+                            <option>WIB (UTC+7)</option>
+                            <option>WITA (UTC+8)</option>
+                            <option>WIT (UTC+9)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <h3>Manajemen Data</h3>
+                    <div class="setting-item">
+                        <button class="btn btn-warning" onclick="backupData()">
+                            <i class="fas fa-download"></i> Backup Data
+                        </button>
+                    </div>
+                    <div class="setting-item">
+                        <button class="btn btn-danger" onclick="showRestoreModal()">
+                            <i class="fas fa-upload"></i> Restore Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modals -->
+    <div id="addShipModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Tambah Data Kapal Baru</h3>
+                <button class="modal-close" onclick="closeModal('addShipModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="shipForm" class="modal-body">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="shipName">Nama Kapal *</label>
+                        <input type="text" id="shipName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="grossTonnage">Gross Tonnage *</label>
+                        <input type="number" id="grossTonnage" required min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="shipOwner">Pemilik Kapal *</label>
+                        <input type="text" id="shipOwner" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="captain">Nahkoda *</label>
+                        <input type="text" id="captain" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="arrivalDate">Tanggal Kedatangan *</label>
+                        <input type="date" id="arrivalDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="arrivalTime">Jam Kedatangan *</label>
+                        <input type="time" id="arrivalTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phoneNumber">No. HP (Opsional)</label> <!-- Changed to optional -->
+                        <input type="tel" id="phoneNumber">
+                    </div>
+                    <div class="form-group">
+                        <label for="phoneStatus">Status HP</label>
+                        <select id="phoneStatus">
+                            <option value="Aktif">Aktif</option>
+                            <option value="Tidak Aktif">Tidak Aktif</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="documentStatus">Status Dokumen</label>
+                        <select id="documentStatus">
+                            <option value="Lengkap">Lengkap</option>
+                            <option value="Tidak Lengkap">Tidak Lengkap</option>
+                            <option value="Pasca">Pasca</option>
+                            <option value="Daerah Lengkap">Daerah Lengkap</option>
+                            <option value="Siup Pusat">Siup Pusat</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('addShipModal')">Batal</button>
+                <button class="btn btn-primary" onclick="saveShip()">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Restore Modal -->
+    <div id="restoreModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Restore Data</h3>
+                <button class="modal-close" onclick="closeModal('restoreModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="backupFile">Pilih File Backup</label>
+                    <input type="file" id="backupFile" accept=".json">
+                </div>
+                <div class="warning-text">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Data saat ini akan digantikan dengan data backup</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('restoreModal')">Batal</button>
+                <button class="btn btn-danger" onclick="restoreData()">Restore</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification System -->
+    <div id="notification" class="notification">
+        <div class="notification-content">
+            <i class="fas fa-check-circle"></i>
+            <span id="notificationMessage"></span>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Konfirmasi</h3>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage">Apakah Anda yakin ingin menghapus data ini?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('confirmModal')">Batal</button>
+                <button class="btn btn-danger" onclick="confirmAction()">Ya, Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
